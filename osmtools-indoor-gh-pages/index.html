@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IndoorOSM</title>
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="css/Control.OSMGeocoder.css" />
+    <link rel="stylesheet" href="css/leaflet.label.css" />
+    <link rel="stylesheet" href="css/fixes.css">
+    <link rel='stylesheet' href='css/font/typicons.min.css' />
+
+    <!-- <script src="http://leafletjs.com/dist/leaflet.js"></script> -->
+    <script src="js/leaflet/leaflet.js"></script>
+    <script src="js/leaflet/leaflet.label.js"></script>
+    <script src="js/leaflet/leaflet.requery.js"></script>
+    <script src="js/leaflet/leaflet.hash.js"></script>
+    <script src="js/leaflet/Control.OSMGeocoder.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/building.js"></script>
+
+    <script src="js/jquery/jquery-1.10.2.min.js"></script>
+    <script src="js/jquery/jquery.dateFormat-1.0.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>  
+    <div class="navbar navbar-default navbar-fixed-top" id="top" role="navigation">
+      <div class="navbar-inner">
+        <div class="container logo">
+          <a class="navbar-brand" href="."><img src="img/map-logo.png" alt="OSMTools" /> indoor map</a>
+          <span>/</span>
+          <span>sources on <a href="https://github.com/clement-lagrange/osmtools-indoor/">GitHub</a></span>
+          <span>/</span>
+          <span>Open this map on <a href="http://openstreetmap.org/" id="osm_org" target="blank">osm.org</a>.</span>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="tools" id="indoor-navigation">
+        <h3></h3>
+        <div id="indoor-escape"><button class="btn"><span class="typcn typcn-backspace"></span><span class="btn-text"></span></button></div>
+        <div id="indoor-levels"></div>
+        <div id="indoor-list-btn"><button class="btn" onclick="$('#indoor-list').toggle()"><img src="img/flecheBas.png"/></button></div>
+
+        <div id="indoor-list" style="display: none">
+          <select class="input-medium" id="indoor-categories" style="display: none">
+            <option value="All" selected><script>document.write(translate('All'));</script></option>
+            <option value="Elevator"><script>document.write(translate('Elevator'));</script></option>
+            <option value="Stairs"><script>document.write(translate('Stairs'));</script></option>
+            <option value="WC"><script>document.write(translate('WC'));</script></option>
+          </select>
+          <div id="indoor-rooms"></div>
+        </div>
+      </div>
+      <div id="indoor-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="indoor-window" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h3 class="modal-title" id="indoor-window-header"></h4>
+            </div>
+            <div class="modal-body" id="indoor-window-text"></div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+      <div id="map"></div>
+    </div>
+    <script src="js/start.js"></script>
+    <script src="js/opening_hours.js/opening_hours.js"></script>
+    <script src="js/overpass.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,413 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+  <title>Système de Réservation de Ressources</title>
+  <link rel="stylesheet" href="Syst%C3%A8me%20de%20R%C3%A9servation%20de%20Ressources_fichiers/mrbs.css" type="text/css">
+    <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ </head>
+ <body bgcolor="#ffffed" alink="red" text="black" vlink="#5B69A6" link="#5B69A6">
+	   
+   
+   <table width="100%">
+    <tbody><tr>
+      <td bgcolor="#5B69A6">
+       <table border="0" width="100%">
+        <tbody><tr>
+         <td class="banner" bgcolor="#C0E0FF">
+          <font size="4"><b>LIFL</b><br>
+           <a href="https://intranet.lifl.fr/SALLES/index.php">Système de Réservation de Ressources</a>
+          </font>
+         </td>
+         <td class="banner" bgcolor="#C0E0FF">
+          <form action="day.php" method="GET">
+           <font size="2">
+<select name="day">
+<option>1
+</option><option>2
+</option><option>3
+</option><option>4
+</option><option>5
+</option><option>6
+</option><option>7
+</option><option>8
+</option><option>9
+</option><option>10
+</option><option>11
+</option><option>12
+</option><option>13
+</option><option>14
+</option><option>15
+</option><option>16
+</option><option>17
+</option><option>18
+</option><option selected="selected">19
+</option><option>20
+</option><option>21
+</option><option>22
+</option><option>23
+</option><option>24
+</option><option>25
+</option><option>26
+</option><option>27
+</option><option>28
+</option><option>29
+</option><option>30
+</option><option>31
+</option></select><select name="month">
+<option value="1">Jan
+</option><option value="2">Feb
+</option><option value="3" selected="selected">Mar
+</option><option value="4">Apr
+</option><option value="5">May
+</option><option value="6">Jun
+</option><option value="7">Jul
+</option><option value="8">Aug
+</option><option value="9">Sep
+</option><option value="10">Oct
+</option><option value="11">Nov
+</option><option value="12">Dec
+</option></select><select name="year">
+<option>2009
+</option><option>2010
+</option><option>2011
+</option><option>2012
+</option><option>2013
+</option><option selected="selected">2014
+</option><option>2015
+</option><option>2016
+</option><option>2017
+</option><option>2018
+</option><option>2019
+</option></select><input name="area" value="1" type="HIDDEN">	    <input value=" Afficher" type="SUBMIT">
+           </font>
+          </form>
+         </td>
+         <td class="banner" bgcolor="#C0E0FF" align="CENTER">
+          <a href="https://intranet.lifl.fr/SALLES/help.php?day=19&amp;month=03&amp;year=2014">Aide</a>
+         </td>
+         <td class="banner" bgcolor="#C0E0FF" align="CENTER">
+          <a href="https://intranet.lifl.fr/SALLES/admin.php?day=19&amp;month=03&amp;year=2014">Gestion</a>
+         </td>
+         <td class="banner" bgcolor="#C0E0FF" align="CENTER">
+          <a href="https://intranet.lifl.fr/SALLES/report.php">Rapport</a>
+         </td>
+         <td class="banner" bgcolor="#C0E0FF" align="CENTER">
+          <form method="GET" action="search.php">
+           <font size="2"><a href="https://intranet.lifl.fr/SALLES/search.php?advanced=1">Recherche:</a> </font>
+           <input name="search_str" size="10" type="TEXT">
+           <input name="day" value="19" type="HIDDEN">
+           <input name="month" value="03" type="HIDDEN">
+           <input name="year" value="2014" type="HIDDEN">
+<input name="area" value="1" type="HIDDEN">          </form>
+         </td>
+        </tr>
+       </tbody></table>
+      </td>
+     </tr>
+    </tbody></table>
+
+<script language="JavaScript">
+// do a little form verifying
+function validate_and_submit ()
+{
+  if(document.forms["main"].name.value == "")
+  {
+    alert ( "Vous n'avez pas saisi\nla description brève.");
+    return false;
+  }
+  
+  h = parseInt(document.forms["main"].hour.value);
+  m = parseInt(document.forms["main"].minute.value);
+  
+  if(h > 23 || m > 59)
+  {
+    alert ("Vous n'avez pas saisi\nune heure valide.");
+    return false;
+  }
+  
+  i1 = parseInt(document.forms["main"].id.value);
+  i2 = parseInt(document.forms["main"].rep_id.value);
+  n = parseInt(document.forms["main"].rep_num_weeks.value);
+  if ((!i1 || (i1 && i2)) && document.forms["main"].rep_type && document.forms["main"].rep_type[6].checked && (!n || n < 2))
+  {
+    alert("Vous n'avez pas saisi\nun intervalle de semaines valide.");
+    return false;
+  }
+  
+  // would be nice to also check date to not allow Feb 31, etc...
+  document.forms["main"].submit();
+  
+  return true;
+}
+
+function getSelectValue(selectId)
+{
+  var selectElmt = document.getElementById(selectId);
+  if (selectElmt != null && selectElmt.selectedIndex != -1) {
+    var selection = selectElmt.options[selectElmt.selectedIndex];
+    if(selection.text.match(/[0-9]+/) != null ){
+      return selection.text.match(/[0-9]+/)[0];
+    }
+  }
+  return "";
+}
+
+function changeUri(){
+    document.getElementById('IndoorOsm').src ="index.html#lat=50.6097504&lon=3.1373735&room="+getSelectValue("Selectsalle")+"";
+}
+</script>
+
+<iframe id="IndoorOsm" onload="changeUri();" width="50%" height="555" align="right"></iframe>
+
+<h2>Editer une réservation</h2>
+
+<form name="main" action="edit_entry_handler.php" method="GET">
+
+<table border="0">
+
+<tbody><tr><td class="CR"><b>Brève description :</b></td>
+  <td class="CL"><input name="name" size="40"></td></tr>
+
+<tr><td class="TR"><b>Description complète:<br>&nbsp;&nbsp;(Nombre de personnes,<br>&nbsp;&nbsp;Interne/Externe etc)</b></td>
+  <td class="TL"><textarea name="description" rows="8" cols="40" wrap="virtual"></textarea></td></tr>
+
+<tr><td class="CR"><b>Date :</b></td>
+ <td class="CL">
+  <select name="day">
+<option>1
+</option><option>2
+</option><option>3
+</option><option>4
+</option><option>5
+</option><option>6
+</option><option>7
+</option><option>8
+</option><option>9
+</option><option>10
+</option><option>11
+</option><option>12
+</option><option>13
+</option><option>14
+</option><option>15
+</option><option>16
+</option><option>17
+</option><option>18
+</option><option selected="selected">19
+</option><option>20
+</option><option>21
+</option><option>22
+</option><option>23
+</option><option>24
+</option><option>25
+</option><option>26
+</option><option>27
+</option><option>28
+</option><option>29
+</option><option>30
+</option><option>31
+</option></select><select name="month">
+<option value="1">Jan
+</option><option value="2">Feb
+</option><option value="3" selected="selected">Mar
+</option><option value="4">Apr
+</option><option value="5">May
+</option><option value="6">Jun
+</option><option value="7">Jul
+</option><option value="8">Aug
+</option><option value="9">Sep
+</option><option value="10">Oct
+</option><option value="11">Nov
+</option><option value="12">Dec
+</option></select><select name="year">
+<option>2009
+</option><option>2010
+</option><option>2011
+</option><option>2012
+</option><option>2013
+</option><option selected="selected">2014
+</option><option>2015
+</option><option>2016
+</option><option>2017
+</option><option>2018
+</option><option>2019
+</option></select> </td>
+</tr>
+
+<tr><td class="CR"><b>Heure :</b></td>
+  <td class="CL"><input name="hour" size="2" value="12" maxlength="2">:<input name="minute" size="2" value="00" maxlength="2">
+</td></tr>
+
+<tr><td class="CR"><b>Durée :</b></td>
+  <td class="CL"><input name="duration" size="7" value="1">
+    <select name="dur_units">
+<option value="minutes">minutes</option><option value="hours" selected="selected">heures</option><option value="days">jours</option><option value="weeks">semaines    </option></select>
+    <input name="all_day" value="yes" type="checkbox"> Journée entière</td></tr>
+
+
+<tr><td class="CR"><b>Salles</b></td>
+  <td class="CL" valign="top"><table><tbody><tr><td><select id="Selectsalle" name="rooms[]" multiple="multiple" onchange="changeUri()">
+  <option selected="selected" value="1" >Amphi Turing 118</option><option value="3" >DELATTRE 018</option><option value="2" >Salle 101</option><option value="11" >Salle 211</option><option value="7" >Salle 226</option><option value="15" >Salle 326</option><option value="12" >Salle du conseil + visio 128 </option></select></td><td>CTRL + clic souris pour sélectionner plus d'une salle</td></tr></tbody></table>
+    </td></tr>
+
+<tr><td class="CR"><b>Type :</b></td>
+  <td class="CL"><select name="type">
+<option value="E">Externe
+</option><option value="I" selected="selected">Interne
+</option></select></td></tr>
+
+
+<tr>
+ <td class="CR"><b>Type de périodicité :</b></td>
+ <td class="CL">
+<input name="rep_type" value="0" checked="checked" type="RADIO">Aucune
+<input name="rep_type" value="1" type="RADIO">Jour
+<input name="rep_type" value="2" type="RADIO">Semaine
+<input name="rep_type" value="3" type="RADIO">Mois
+<input name="rep_type" value="4" type="RADIO">Année
+<input name="rep_type" value="5" type="RADIO">Mois, même jour semaine
+<input name="rep_type" value="6" type="RADIO">tous les n semaines
+ </td>
+</tr>
+
+<tr>
+ <td class="CR"><b>Date de fin de périodicité :</b></td>
+ <td class="CL"><select name="rep_end_day">
+<option>1
+</option><option>2
+</option><option>3
+</option><option>4
+</option><option>5
+</option><option>6
+</option><option>7
+</option><option>8
+</option><option>9
+</option><option>10
+</option><option>11
+</option><option>12
+</option><option>13
+</option><option>14
+</option><option>15
+</option><option>16
+</option><option>17
+</option><option>18
+</option><option selected="selected">19
+</option><option>20
+</option><option>21
+</option><option>22
+</option><option>23
+</option><option>24
+</option><option>25
+</option><option>26
+</option><option>27
+</option><option>28
+</option><option>29
+</option><option>30
+</option><option>31
+</option></select><select name="rep_end_month">
+<option value="1">Jan
+</option><option value="2">Feb
+</option><option value="3" selected="selected">Mar
+</option><option value="4">Apr
+</option><option value="5">May
+</option><option value="6">Jun
+</option><option value="7">Jul
+</option><option value="8">Aug
+</option><option value="9">Sep
+</option><option value="10">Oct
+</option><option value="11">Nov
+</option><option value="12">Dec
+</option></select><select name="rep_end_year">
+<option>2009
+</option><option>2010
+</option><option>2011
+</option><option>2012
+</option><option>2013
+</option><option selected="selected">2014
+</option><option>2015
+</option><option>2016
+</option><option>2017
+</option><option>2018
+</option><option>2019
+</option></select></td>
+</tr>
+
+<tr>
+ <td class="CR"><b>Jour :</b> (pour n-semaines)</td>
+ <td class="CL">
+<input name="rep_day[0]" type="CHECKBOX">Sunday
+<input name="rep_day[1]" type="CHECKBOX">Monday
+<input name="rep_day[2]" type="CHECKBOX">Tuesday
+<input name="rep_day[3]" type="CHECKBOX">Wednesday
+<input name="rep_day[4]" type="CHECKBOX">Thursday
+<input name="rep_day[5]" type="CHECKBOX">Friday
+<input name="rep_day[6]" type="CHECKBOX">Saturday
+ </td>
+</tr>
+
+
+<tr>
+ <td class="CR"><b>Intervalle de semaines</b> (pour n-semaines)</td>
+ <td class="CL"><input name="rep_num_weeks" type="TEXT">
+</td></tr>
+
+<tr>
+ <td colspan="2" align="center">
+  <script language="JavaScript">
+   document.writeln ( '<INPUT TYPE="button" VALUE="Enregistrer" ONCLICK="validate_and_submit()">' );
+  </script><input value="Enregistrer" onclick="validate_and_submit()" type="button">
+
+  <noscript>
+   <INPUT TYPE="submit" VALUE="Enregistrer">
+  </noscript>
+ </td></tr>
+</tbody></table>
+
+<input name="returl" value="" type="HIDDEN">
+<!--INPUT TYPE=HIDDEN NAME="room_id"   VALUE="3"-->
+<input name="create_by" value="lagrange" type="HIDDEN">
+<input name="rep_id" value="0" type="HIDDEN">
+<input name="edit_type" value="series" type="HIDDEN">
+<input name="id" value="0" type="HIDDEN">
+
+</form>
+
+<p></p><hr><b>Voir la journée:</b>
+<a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=13&amp;area=1">13 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=14&amp;area=1">14 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=15&amp;area=1">15 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=16&amp;area=1">16 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=17&amp;area=1">17 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=18&amp;area=1">18 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=19&amp;area=1">19 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=20&amp;area=1">20 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=21&amp;area=1">21 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=22&amp;area=1">22 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=23&amp;area=1">23 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=24&amp;area=1">24 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=25&amp;area=1">25 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/day.php?year=2014&amp;month=03&amp;day=26&amp;area=1">26 Mar</a>
+<br><b>Voir la semaine:</b>
+<a href="https://intranet.lifl.fr/SALLES/week.php?year=2014&amp;month=02&amp;day=16&amp;area=1&amp;room=3">16 Feb</a>
+ | <a href="https://intranet.lifl.fr/SALLES/week.php?year=2014&amp;month=02&amp;day=23&amp;area=1&amp;room=3">23 Feb</a>
+ | <a href="https://intranet.lifl.fr/SALLES/week.php?year=2014&amp;month=03&amp;day=02&amp;area=1&amp;room=3">02 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/week.php?year=2014&amp;month=03&amp;day=09&amp;area=1&amp;room=3">09 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/week.php?year=2014&amp;month=03&amp;day=16&amp;area=1&amp;room=3">16 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/week.php?year=2014&amp;month=03&amp;day=23&amp;area=1&amp;room=3">23 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/week.php?year=2014&amp;month=03&amp;day=30&amp;area=1&amp;room=3">30 Mar</a>
+ | <a href="https://intranet.lifl.fr/SALLES/week.php?year=2014&amp;month=04&amp;day=06&amp;area=1&amp;room=3">06 Apr</a>
+ | <a href="https://intranet.lifl.fr/SALLES/week.php?year=2014&amp;month=04&amp;day=13&amp;area=1&amp;room=3">13 Apr</a>
+<br><b>Voir le mois:</b>
+<a href="https://intranet.lifl.fr/SALLES/month.php?year=2014&amp;month=01&amp;area=1&amp;room=3">Jan 2014</a>
+ | <a href="https://intranet.lifl.fr/SALLES/month.php?year=2014&amp;month=02&amp;area=1&amp;room=3">Feb 2014</a>
+ | <a href="https://intranet.lifl.fr/SALLES/month.php?year=2014&amp;month=03&amp;area=1&amp;room=3">Mar 2014</a>
+ | <a href="https://intranet.lifl.fr/SALLES/month.php?year=2014&amp;month=04&amp;area=1&amp;room=3">Apr 2014</a>
+ | <a href="https://intranet.lifl.fr/SALLES/month.php?year=2014&amp;month=05&amp;area=1&amp;room=3">May 2014</a>
+ | <a href="https://intranet.lifl.fr/SALLES/month.php?year=2014&amp;month=06&amp;area=1&amp;room=3">Jun 2014</a>
+ | <a href="https://intranet.lifl.fr/SALLES/month.php?year=2014&amp;month=07&amp;area=1&amp;room=3">Jul 2014</a>
+ | <a href="https://intranet.lifl.fr/SALLES/month.php?year=2014&amp;month=08&amp;area=1&amp;room=3">Aug 2014</a>
+ | <a href="https://intranet.lifl.fr/SALLES/month.php?year=2014&amp;month=09&amp;area=1&amp;room=3">Sep 2014</a>
+<hr><p></p><center><a href="https://intranet.lifl.fr/SALLES/edit_entry.php?&amp;pview=1">Format imprimable</a></center><p>
+</p><hr>
+
+
+</body></html>
